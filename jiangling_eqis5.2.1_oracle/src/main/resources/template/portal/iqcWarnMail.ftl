@@ -1,0 +1,11 @@
+您好：
+        ${inspectionDate}进货检验不合格预警如下：
+检验报告编号：${inspectionNo}
+零件编号：${checkBomCode}
+零件名称：${checkBomName}
+批次号：${batchNo}
+供应商：${supplierName}
+检验类型：${inspectionType}
+检验项目：${ss}
+问题描述：${remark1}
+点击详情：${url}

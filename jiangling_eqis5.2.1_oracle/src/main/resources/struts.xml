@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.convention.classes.reload" value="true" />
+	<constant name="struts.objectFactory.spring.autoWire.alwaysRespect" value="true"/>
+	<constant name="struts.convention.result.path" value="/WEB-INF/jsp/" />
+	<constant name="struts.convention.action.packages" value="com.ambition.si,com.ambition.ecm,com.ambition.portal,com.ambition.util,com.ambition.rnd,com.ambition.doc,com.ambition.tem,com.ambition.chartdesign,com.ambition.product,com.ambition.carmfg,com.ambition.trace,com.ambition.iqc,com.ambition.aftersales,com.ambition.improve,com.ambition.monitor,com.ambition.spc,com.ambition.gsm,com.ambition.mobile,com.ambition.supplier,com.ambition.integration,com.ambition.goal,com.ambition.synthesize,com.ambition.dac,com.ambition.qsm,com.ambition.ecm,com.ambition.cost,com.ambition.epm,com.ambition.webservice"/>
+	<constant name="struts.convention.package.locators.disable" value="true" />
+	<constant name="struts.custom.i18n.resources" value="message,globalMessages,mmsMessages,wfMessages,portal" />
+	<constant name="struts.action.extension" value="htm,action" />
+	<!-- 用于CRUD Action的parent package -->
+	<package name="default" extends="struts-default">
+		<!-- 基于paramsPrepareParamsStack,增加store interceptor -->
+		<interceptors>
+			<interceptor-stack name="storeStack">
+				<interceptor-ref name="store">
+					<param name="operationMode">AUTOMATIC</param>
+				</interceptor-ref>
+				<interceptor-ref name="paramsPrepareParamsStack" />
+			</interceptor-stack>
+		</interceptors>
+
+		<default-interceptor-ref name="storeStack" />
+		<action name="create-tree" method="createTree" class="com.norteksoft.mms.form.web.FormViewAction">
+			<result name="create-tree">/WEB-INF/jsp/form/form-view-create-tree.jsp</result>
+		</action>
+		<action name="get-data" method="getData" class="com.norteksoft.mms.form.web.FormViewAction">
+		</action>
+		<action name="show-data-selection" method="showDataSelection" class="com.norteksoft.mms.form.web.FormViewAction">
+			<result name="show-data-selection">/WEB-INF/jsp/form/form-view-show-data-selection.jsp</result>
+		</action>
+	</package>
+	<!-- 
+		使用Convention插件,实现约定大于配置的零配置文件风格.
+	           特殊的Result路径在Action类中使用@Result设定. 
+	           http://localhost:8080/dms/config-browser/index.htm
+	-->
+</struts>

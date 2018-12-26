@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-modules id="moduleCoreId" project-version="1.5.0">
+	<wb-module deploy-name="jiangling_eqis5.2.1_oracle">
+		<wb-resource deploy-path="/" source-path="/amb" />
+		<wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources" />
+		<wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java" />
+		<wb-resource deploy-path="/WEB-INF/classes"
+			source-path="/src/main/resources/internationalization" />
+		<property name="context-root" value="jiangling_eqis5.2.1_oracle" />
+		<property name="java-output-path" value="/jiangling_eqis5.2.1_oracle/build/classes" />
+	</wb-module>
+</project-modules>

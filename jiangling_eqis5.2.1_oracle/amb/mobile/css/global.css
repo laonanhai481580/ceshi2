@@ -1,0 +1,57 @@
+/*======================
+	company:daoking.cn
+	author:YaoRen
+	e-mail:185653386@qq.com
+	date:2013-11-11
+======================*/
+
+/*reset*/
+body,p,h1,h2,h3,h4,h5,h6,dd,dl,dt,th,td,ul,li,ol,form,input,select,textarea,button,pre,legend{ margin:0;padding:0;font-size:16px;font-family:"微软雅黑",helvetica,arial;}
+button, input, select, textarea { vertical-align:middle; font-family:"微软雅黑",helvetica,arial; -webkit-appearance:none;}
+h1, h2, h3, h4, h5, h6 { font-size:100%;}
+table{border-collapse:collapse;border-spacing:0;}
+img,fieldset{ border:0;}
+address,cite,dfn,em,var,i{font-style:normal;}
+ul,ol{list-style-type:none;}
+sup{ vertical-align: text-top; }
+sub{ vertical-align: text-bottom; }
+
+a{ text-decoration:none; cursor:pointer;}
+select,input,textarea{ outline:none;}
+input{border-radius: 0;}
+
+/*浮动*/
+.fl{float:left;}
+.fr{float:right;}
+.clear {clear: both;}
+.clearfix:after {clear:both; content:'';display: block;font-size: 0;line-height: 0;visibility: hidden;	width: 0;height: 0;}
+.clearfix {+display: inline-block;}
+* html .clearfix {height: 1%;}
+.f100{font-size: 1rem;}
+.f625{font-size: .625rem;}
+.f75{font-size: .75rem;}
+.f85{font-size: .85rem;}
+.brf{border: 1px solid #fff;}
+.txtc{text-align: center;}
+
+.bdt{border-top:1px solid #dddddd;}
+.bdb{border-bottom: 1px solid #dddddd;}
+.bdtb{border-top:1px solid #dddddd;	border-bottom:1px solid #dddddd;}
+.marlf{margin-left: 17px;}
+.marlf2{margin-left: .3rem;}
+.marb10{margin-bottom: 10px;}
+.mart10{margin-top: 10px;}
+.bd_gray{border:1px solid #dddddd;}
+.bd_green{border:1px solid #56b76f;}
+.green_brd{	border: 1px solid #56b76f;}
+.gray_brd{border: 1px solid #444444;}
+.yel_brd{border: 1px solid #bee02a;}
+.gray_bg{background: #444444;}
+.gray_bg2{background: #dddddd;}
+.gray_bg3{background: #555555;}
+.green_bg{background: #56b76f;}
+.yel_bg{background: #bee02a;}
+.red_font{color: #ff0000!important}
+.green_col{color: #56b76f;}
+.red_bg{background: #ff0000;}
+.gray_font{color: #666666}

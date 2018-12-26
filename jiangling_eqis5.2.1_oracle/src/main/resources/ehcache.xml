@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="GBK"?>
+<ehcache>
+    <!-- 缓存到硬盘的路径  -->
+    <diskStore path="/ehcache"></diskStore>
+    <!--
+           默认设置
+        maxElementsInMemory : 在內存中最大緩存的对象数量。
+        eternal : 缓存的对象是否永远不变。
+        timeToIdleSeconds ：可以操作对象的时间。
+        timeToLiveSeconds ：缓存中对象的生命周期，时间到后查询数据会从数据库中读取。
+        overflowToDisk ：内存满了，是否要缓存到硬盘。
+    -->
+    <defaultCache maxElementsInMemory="10000" eternal="false" 
+        timeToIdleSeconds="50" timeToLiveSeconds="60" overflowToDisk="true"></defaultCache>
+    <!-- 以下配置的都是查询缓冲 ，查询缓存（不包括二级缓存）默认这个配置，即：没有为某个实体专门配置Cache时默认使用该配置-->
+	<cache name="org.hibernate.cache.StandardQueryCache"
+		maxElementsInMemory="10000" eternal="false" timeToIdleSeconds="50"
+		timeToLiveSeconds="60" overflowToDisk="false" />
+
+    <!-- 用于保存查询最近查询的一系列表的时间戳 -->
+	<cache name="org.hibernate.cache.UpdateTimestampsCache" maxElementsInMemory="5000" eternal="true" overflowToDisk="false" /> 
+        
+    <!--
+          指定缓存的对象。 下面出现的的属性覆盖上面出现的，没出现的继承上面的。
+    -->
+	<!-- 直接指定name为实体 包名称.类名称，这样实体就会直接使用这个策略，不用再实体中具体指定或 代码设置了 -->
+    <cache name="com.ambition.aftersales.entity.FaultInfoView" maxElementsInMemory="10000" eternal="true"
+		timeToIdleSeconds="500" timeToLiveSeconds="600" overflowToDisk="true"
+		diskPersistent="false" diskExpiryThreadIntervalSeconds="1200"
+		memoryStoreEvictionPolicy="LRU" />
+    <cache name="com.ambition.carmfg.entity.ProductBom" maxElementsInMemory="10000" eternal="true"
+		timeToIdleSeconds="500" timeToLiveSeconds="600" overflowToDisk="true"
+		diskPersistent="false" diskExpiryThreadIntervalSeconds="1200"
+		memoryStoreEvictionPolicy="LRU" />	
+		
+		
+	<cache name="SimplePageCachingFilter" 
+        maxElementsInMemory="10000" 
+        eternal="false"
+        overflowToDisk="false" 
+        timeToIdleSeconds="43200" 
+        timeToLiveSeconds="86400"
+        memoryStoreEvictionPolicy="LFU" />
+</ehcache>

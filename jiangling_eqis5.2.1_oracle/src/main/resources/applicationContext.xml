@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd 
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx-2.5.xsd 
+	http://www.springframework.org/schema/jee 
+	http://www.springframework.org/schema/jee/spring-jee-2.5.xsd  
+	http://www.springframework.org/schema/aop  
+	http://www.springframework.org/schema/aop/spring-aop-2.5.xsd 
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-2.5.xsd 
+	http://cxf.apache.org/jaxws   
+    http://cxf.apache.org/schemas/jaxws.xsd"
+	default-lazy-init="true" default-autowire="byName">
+
+	<description>Spring公共配置文件 </description>
+	<import resource="classpath:META-INF/cxf/cxf.xml"/>  
+    <import resource="classpath:META-INF/cxf/cxf-extension-soap.xml"/>  
+    <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>  
+	<!-- 定义受环境影响易变的变量 -->
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="locations">
+			<list>
+				<!-- 标准配置 -->
+				<value>classpath*:/application.properties</value>
+				<!-- 服务器生产环境配置 -->
+				<!-- <value>file:/var/myapp/application.server.properties</value> -->
+			</list>
+		</property>
+	</bean>
+	<jaxws:endpoint id="DownLoadInfo2" implementor="com.ambition.webservice.DownLoadInfo2Impl"  address="/DownLoadInfo2" />
+	<!-- 使用annotation 自动注册bean,并保证@Required,@Autowired的属性被注入 -->
+	<context:component-scan base-package="com.norteksoft.product.api" />
+	<context:component-scan base-package="com.norteksoft.portal" />
+	<context:component-scan base-package="com.norteksoft.acs" />
+	<context:component-scan base-package="com.norteksoft.mms" />
+	<context:component-scan base-package="com.norteksoft.wf" />
+	<context:component-scan base-package="com.norteksoft.task" />
+	<context:component-scan base-package="com.norteksoft.bs" />
+	<context:component-scan base-package="com.norteksoft.tags.search" />
+	<context:component-scan base-package="com.norteksoft.product.orm.hibernate" />
+	<context:component-scan base-package="com.ambition.util" />
+	
+	<context:component-scan base-package="com.ambition.qsm" />
+	<context:component-scan base-package="com.ambition.improve" />
+	<context:component-scan base-package="com.ambition.aftersales" />
+	<context:component-scan base-package="com.ambition.carmfg" />
+	<context:component-scan base-package="com.ambition.iqc" />
+	<context:component-scan base-package="com.ambition.supplier" />
+	<context:component-scan base-package="com.ambition.spc" />
+	<context:component-scan base-package="com.ambition.schedule" />
+	<context:component-scan base-package="com.ambition.synthesize" />
+	<context:component-scan base-package="com.ambition.chartdesign" />
+	<context:component-scan base-package="com.ambition.rnd" />
+	<context:component-scan base-package="com.ambition.gsm" />
+	<context:component-scan base-package="com.ambition.trace" />
+	<context:component-scan base-package="com.ambition.dac" />
+	<context:component-scan base-package="com.ambition.ecm" />
+	<context:component-scan base-package="com.ambition.cost" />
+	<context:component-scan base-package="com.ambition.epm" />
+	<context:component-scan base-package="com.ambition.si" />
+	<context:component-scan base-package="com.ambition.webservice" />
+	<context:component-scan base-package="com.ambition.doc" />
+	<context:component-scan base-package="com.ambition.portal" />
+	<context:component-scan base-package="com.ambition.mobile" />
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+	
+	 <bean id="logAspect" class="com.ambition.util.aop.LogAspect" lazy-init="false"></bean>
+	 <aop:config>
+		<aop:aspect ref="logAspect">
+			<aop:pointcut id="logMethod" expression="@annotation(logInfo)"/>
+			<aop:after-returning method="log" pointcut-ref="logMethod" arg-names="logInfo"/>
+			<aop:pointcut id="errorLogMethod" expression="@annotation(org.apache.struts2.convention.annotation.Action)"/>
+			<aop:after-throwing method="debug" pointcut-ref="errorLogMethod" throwing="ex"/>
+		</aop:aspect>
+	</aop:config>
+	
+	<!-- 数据源配置,使用应用内的DBCP数据库连接池 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${hibernate.connection.driver_class}" />
+		<property name="url" value="${hibernate.connection.url}" />
+		<property name="username" value="${hibernate.connection.username}" />
+		<property name="password" value="${hibernate.connection.password}" />
+
+		<property name="initialSize" value="10" />
+		<!--最大活动连接-->
+		<property name="maxActive" value="100" />
+		<!--最大空闲连接-->
+		<property name="maxIdle" value="50" />
+		<!--从池中取连接的最大等待时间，单位ms-->
+		<property name="maxWait" value="1000" />
+		<property name="poolPreparedStatements" value="false" />
+                <property name="maxOpenPreparedStatements" value="50" />
+		<property name="defaultAutoCommit" value="false" />
+		<!--借出连接时不要测试，否则很影响性能,因为它的默认值是true-->
+		<property name="testOnBorrow" value="false" />
+		<property name="validationQuery" value="select 1 from dual" />
+		<!--指明连接是否被空闲连接回收器(如果有)进行检验.如果检测失败,则连接将被从池中去除.-->
+		<property name="testWhileIdle" value="true" />
+		<!--每300秒运行一次空闲连接回收器-->
+		<property name="timeBetweenEvictionRunsMillis" value="300000" />
+		<!--池中的连接空闲30分钟后被回收,默认值就是30分钟-->
+		<property name="minEvictableIdleTimeMillis" value="1800000" />
+		<!--在每次空闲连接回收器线程(如果有)运行时检查的连接数量，默认值就是3-->
+		<property name="numTestsPerEvictionRun" value="5" />
+	</bean>
+	<!-- 连接OR系统数据库数据源配置,使用应用内的DBCP数据库连接池 -->
+	<bean id="ordbDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${ordb.sqlview.driver.class}" />
+		<property name="url" value="${ordb.sqlview.connection.url}" />
+		<property name="username" value="${ordb.sqlview.username}" />
+		<property name="password" value="${ordb.sqlview.password}" />
+		<property name="initialSize" value="5" />
+		<property name="maxActive" value="10" />
+		<property name="maxIdle" value="10" />
+		<property name="maxWait" value="1000" />
+		<property name="poolPreparedStatements" value="true" />
+		<property name="defaultAutoCommit" value="true" />
+	</bean>
+	<!-- or快照数据库 jdbc配置 -->
+	<bean id="ordbDataJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="ordbDataSource" />
+	</bean>
+	
+	<bean id="oadbDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${oadb.sqlview.driver.class}" />
+		<property name="url" value="${oadb.sqlview.connection.url}" />
+		<property name="username" value="${oadb.sqlview.username}" />
+		<property name="password" value="${oadb.sqlview.password}" />
+		<property name="initialSize" value="5" />
+		<property name="maxActive" value="10" />
+		<property name="maxIdle" value="10" />
+		<property name="maxWait" value="1000" />
+		<property name="poolPreparedStatements" value="true" />
+		<property name="defaultAutoCommit" value="true" />
+	</bean>
+	<!-- oa快照数据库 jdbc配置 -->
+	<bean id="oadbDataJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="oadbDataSource" />
+	</bean>	
+		<!-- 连接HR系统数据库数据源配置,使用应用内的DBCP数据库连接池 -->
+	<bean id="mesdbDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${mesdb.sqlview.driver.class}" />
+		<property name="url" value="${mesdb.sqlview.connection.url}" />
+		<property name="username" value="${mesdb.sqlview.username}" />
+		<property name="password" value="${mesdb.sqlview.password}" />
+		<property name="initialSize" value="5" />
+		<property name="maxActive" value="10" />
+		<property name="maxIdle" value="10" />
+		<property name="maxWait" value="1000" />
+		<property name="poolPreparedStatements" value="true" />
+		<property name="defaultAutoCommit" value="true" />
+	</bean>
+	<!-- HR快照数据库 jdbc配置 -->
+	<bean id="mesdbDataJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="mesdbDataSource" />
+	</bean>
+	
+	
+	<!-- 数据源配置,使用应用服务器的数据库连接池 -->
+	<!--
+	<jee:jndi-lookup id="dataSource" jndi-name="java:comp/env/${jndi.name}" />
+	-->
+	<!-- Hibernate配置 -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="namingStrategy">
+			<bean class="org.hibernate.cfg.ImprovedNamingStrategy" />
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.default_schema">${hibernate.connection.username}</prop>
+ 			    <!-- <prop key="hibernate.hbm2ddl.auto">update</prop> -->
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+				
+				<!--<prop key="hibernate.cache.use_second_level_cache">false</prop>
+				<prop key="hibernate.cache.use_query_cache">false</prop>
+				<prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
+				<prop key="hibernate.cache.provider_configuration_file_resource_path">/ehcache.xml</prop>
+				-->
+			</props>
+		</property>
+		<property name="packagesToScan">
+			<list >	
+				<value>com.norteksoft.portal.entity</value>
+				<value>com.norteksoft.acs.entity.*</value>
+				<value>com.norteksoft.mms.form.entity</value>
+				<value>com.norteksoft.mms.module.entity</value>
+				<value>com.norteksoft.wf.engine.entity</value>
+				<value>com.norteksoft.task.entity</value>
+				<value>com.norteksoft.bs.rank.entity</value>
+				<value>com.norteksoft.bs.options.entity</value>
+				<value>com.norteksoft.bs.holiday.entity</value>
+				<value>com.norteksoft.bs.signature.entity</value>
+				
+				<value>com.ambition.util.*.entity</value>
+				
+				<value>com.ambition.qsm.entity</value>
+				<value>com.ambition.ecm.entity</value>
+				<value>com.ambition.improve.entity</value>
+				<value>com.ambition.aftersales.entity</value>
+				<value>com.ambition.carmfg.entity</value>
+				<value>com.ambition.iqc.entity</value>
+				<value>com.ambition.supplier.entity</value>
+				<value>com.ambition.spc.entity</value>
+				<value>com.ambition.synthesize.entity</value>
+				<value>com.ambition.gsm.entity</value>
+				<value>com.ambition.chartdesign.entity</value>
+				<value>com.ambition.epm.entity</value>
+				<value>com.ambition.cost.entity</value>
+				<value>com.ambition.doc.entity</value>
+				<value>com.ambition.si.entity</value>
+				<value>com.ambition.mobile.entity</value>
+			</list>
+		</property>
+		<property name="mappingLocations">
+			<list>
+				<value>classpath*:jbpm.repository.hbm.xml</value>
+				<value>classpath*:jbpm.execution.hbm.xml</value>
+				<value>classpath*:jbpm.history.hbm.xml</value>
+				<value>classpath*:jbpm.task.hbm.xml</value>
+				<value>classpath*:jbpm.identity.hbm.xml</value>
+			</list>
+		</property>
+		<property name="eventListeners">
+			<map>
+				<entry key="save-update">
+					<ref bean="saveOrUpdateListener"/>
+				</entry>
+			</map>
+		</property>
+	</bean>
+ 	<!-- SPC快照数据库 jdbc配置 -->
+	<bean id="spcCopyDataJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="spcCopyDataSource" />
+	</bean>
+    <!-- 连接SPC快照数据库数据源配置,使用应用内的DBCP数据库连接池 -->
+	<bean id="spcCopyDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${sqccopydata.sqlview.driver.class}" />
+		<property name="url" value="${sqccopydata.sqlview.connection.url}" />
+		<property name="username" value="${sqccopydata.sqlview.username}" />
+		<property name="password" value="${sqccopydata.sqlview.password}" />
+		
+		<property name="initialSize" value="5" />
+		<property name="maxActive" value="10" />
+		<property name="maxIdle" value="30" />
+		<property name="maxWait" value="1000" />
+		<property name="poolPreparedStatements" value="true" />
+		<property name="defaultAutoCommit" value="false" />
+	</bean>
+
+	<!-- 事务管理器配置,单数据源事务 -->
+	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- 使用annotation定义事务 -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	<bean id="springHelper" class="org.jbpm.pvm.internal.processengine.SpringHelper" />
+	<bean id="processEngine" factory-bean="springHelper" factory-method="createProcessEngine" />
+	<!-- JDBC Ben -->
+    <bean id="jdbcDao" class="com.norteksoft.mms.form.jdbc.impl.MySqlJdbc">
+    	<property name="dataSource" ref="dataSource"/>
+    </bean>
+    <!-- 调度任务 -->
+   <!-- <bean id="mailJob" class="com.ambition.util.erp.schedule.MailJob" init-method="init" lazy-init="false"></bean>
+    <bean id="scheduleJob" class="com.ambition.util.erp.schedule.ScheduleJob" init-method="init" lazy-init="false"></bean>-->
+	
+</beans>

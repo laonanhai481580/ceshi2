@@ -1,0 +1,1 @@
+<jsp:include page="../../manu-analyse/defective-goods-report-detail.jsp"/>

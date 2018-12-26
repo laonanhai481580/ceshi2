@@ -1,0 +1,38 @@
+h1 {
+	color: red;
+}
+
+#div p {
+	color: red;
+}
+
+#div a {
+	color: blue;
+}
+
+#heading {
+	width: 100%;
+	height: 10%;
+	background-color: aqua;
+}
+
+#menu {
+	width: 30%;
+	height: 80%;
+	background-color: aquamarine;
+	float: left;
+}
+
+#hellobody {
+	width: 70%;
+	height: 80%;
+	background-color: blueviolet;
+	float: left;
+}
+
+#footing {
+	width: 100%;
+	height: 10%;
+	background-color: black;
+	clear: both;
+}
